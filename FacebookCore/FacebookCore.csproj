@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <Version>0.0.1</Version>
+    <Authors>Ophir Oren</Authors>
+    <Company />
+    <Description>An unofficial .NET Core SDK for Facebook API</Description>
+    <Copyright>Copyright (c) 2017 Ophir Oren</Copyright>
+    <PackageLicenseUrl>https://github.com/developer82/FacebookCore/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/developer82/FacebookCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/developer82/FacebookCore</RepositoryUrl>
+    <PackageTags>Facebook;SDK;API;FB;FacebookSDK;Social Network;Friends;Graph</PackageTags>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
