@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rest.Net;
 using Rest.Net.Interfaces;
+using System.Threading.Tasks;
 
 namespace FacebookCore
 {
@@ -37,21 +38,18 @@ namespace FacebookCore
         
         public JObject Get(string path, string accessToken = null)
         {
-            if (!path.StartsWith("/"))
-            {
-                path = "/" + path;
-            }
+            string pathWithToken = ApplyAccessToken(path, accessToken);
 
-            if (accessToken == null)
-            {
-                accessToken = string.Empty;
-            }
-            else
-            {
-                accessToken = (path.Contains("?") ? "&" : "?") + "access_token=" + accessToken;
-            }
+            var response = RestClient.Get(pathWithToken);
+            var serializedResponse = SerializeResponse(response);
+            return serializedResponse;
+        }
 
-            var response = RestClient.Get($"/{GraphApiVersion}{path}{accessToken}");
+        public async Task<JObject> GetAsync(string path, string accessToken = null)
+        {
+            string pathWithToken = ApplyAccessToken(path, accessToken);
+
+            var response = await RestClient.GetAsync(pathWithToken);
             var serializedResponse = SerializeResponse(response);
             return serializedResponse;
         }
@@ -72,6 +70,26 @@ namespace FacebookCore
             {
                 return null;
             }
+        }
+
+        private string ApplyAccessToken(string path, string accessToken = null)
+        {
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
+
+            if (accessToken == null)
+            {
+                accessToken = string.Empty;
+            }
+            else
+            {
+                accessToken = (path.Contains("?") ? "&" : "?") + "access_token=" + accessToken;
+            }
+
+            string pathWithToken = $"/{GraphApiVersion}{path}{accessToken}";
+            return pathWithToken;
         }
     }
 }
