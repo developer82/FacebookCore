@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Rest.Net;
-using Rest.Net.Interfaces;
+﻿using Rest.Net.Interfaces;
 
-namespace FacebookCore
+namespace FacebookCore.APIs
 {
     public abstract class ApiBaseClass
     {

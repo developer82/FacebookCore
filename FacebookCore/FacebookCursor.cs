@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FacebookCore
+﻿namespace FacebookCore
 {
     public class FacebookCursor
     {
+        public enum Direction
+        {
+            None,
+            Next,
+            Previous,
+            Before,
+            After
+        }
+
         public string Before { get; internal set; }
         public string After { get; internal set; }
 

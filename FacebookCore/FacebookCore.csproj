@@ -20,7 +20,7 @@ For erlier .NET Core or .NET Standard versions, use version &lt; 2.0.0</PackageR
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rest.Net" Version="1.0.6" />
+    <PackageReference Include="Rest.Net" Version="2.0.1" />
   </ItemGroup>
 
 </Project>
