@@ -18,3 +18,10 @@ The main class that you would need, and that abstract the entire library use is 
 Initialize the `FacebookClient` in the following way:
 
     FacebookClient client = new FacebookClient("[your_client_id]", "[your_client_secret]");
+
+### Facebook Generic Collections
+When querying the Facebook API for data with multiple values of the same type, it returns as an object that contains an array of the results and some metadata, along with a cursor indicating the next and previous results set (if any exists).
+
+The `FacebookCollection<T>` abstracts the management of the results as an enumerable collection that you could use with a POCO class (using a mapper), and manages the state of the collection, allowing you to load additional items into the collection from the Facebook API and retrieve the next or previous set of items available.
+
+The APIs already implemented in this library make use of that generic collection and abstract it as a new already typed collection for ease of use. In the case this library does not cover the collection you need, you can use this class to represent and manage collections easily.
