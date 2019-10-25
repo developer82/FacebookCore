@@ -95,7 +95,7 @@ namespace FacebookCore
                 }
             }
 
-            var response = await RestClient.GetAsync($"/{GraphApiVersion}{path}{accessToken}{cursorStr}");
+            var response = await RestClient.GetAsync($"/{GraphApiVersion}{path}{accessToken}{cursorStr}", false);
             var serializedResponse = SerializeResponse(response);
             return serializedResponse;
         }
