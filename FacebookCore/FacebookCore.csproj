@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.2</Version>
+    <Version>2.1.13</Version>
     <Authors>Ophir Oren</Authors>
     <Company />
     <Description>An unofficial .NET Core SDK for Facebook API</Description>
@@ -11,8 +11,8 @@
     <PackageProjectUrl>https://github.com/developer82/FacebookCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/developer82/FacebookCore</RepositoryUrl>
     <PackageTags>Facebook;SDK;API;FB;FacebookSDK;Social Network;Friends;Graph</PackageTags>
-    <AssemblyVersion>2.1.2.0</AssemblyVersion>
-    <FileVersion>2.1.2.0</FileVersion>
+    <AssemblyVersion>2.1.13.0</AssemblyVersion>
+    <FileVersion>2.1.13.0</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReleaseNotes>Update to .NET Standard 2.0.
 Library version also updated to 2.0.0 to be consisted with the new 2.0.
