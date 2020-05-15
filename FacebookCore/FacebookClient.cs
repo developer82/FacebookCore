@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,6 +39,12 @@ namespace FacebookCore
             RestClient = new RestClient("https://graph.facebook.com/");
         }
 
+        public FacebookClient(FacebookConfig facebookConfig)
+            :this(facebookConfig.ClientId, facebookConfig.ClientSecret)
+        {
+            GraphApiVersion = facebookConfig.GraphApiVersion;
+        }
+
         /// <summary>
         /// Create a new instance of the Users API
         /// </summary>
@@ -68,36 +75,52 @@ namespace FacebookCore
         /// <returns></returns>
         public async Task<JObject> GetAsync(string path, string accessToken = null, FacebookCursor cursor = null, Direction cursorDirection = Direction.None)
         {
+            path = StandardizePath(path);
+            path = AddAccessTokenToPathIfNeeded(path, accessToken);
+            path = AddCursorToPathIfNeeded(path, cursor, cursorDirection);
+            
+            return SerializeResponse(await RestClient.GetAsync($"/{GraphApiVersion}{path}", false));
+        }
+
+        private string StandardizePath(string path)
+        {
             if (!path.StartsWith("/"))
             {
                 path = "/" + path;
             }
 
-            if (accessToken == null)
+            return path;
+        }
+
+        private string AddAccessTokenToPathIfNeeded(string path, string accessToken)
+        {
+            var accessTokenPart = string.Empty;
+            if (accessToken != null)
             {
-                accessToken = string.Empty;
-            }
-            else
-            {
-                accessToken = (path.Contains("?") ? "&" : "?") + "access_token=" + accessToken;
+                accessTokenPart = (path.Contains("?") ? "&" : "?") + "access_token=" + accessToken;
             }
 
-            string cursorStr = string.Empty;
+            return path + accessTokenPart;
+        }
+
+        private string AddCursorToPathIfNeeded(string path, FacebookCursor cursor, Direction cursorDirection)
+        {
+            string cursorPart = string.Empty;
+
             if (cursor != null && cursorDirection != Direction.None)
             {
-                if ((cursorDirection == Direction.After || cursorDirection == Direction.Next) && !string.IsNullOrWhiteSpace(cursor.After))
+                if (!string.IsNullOrWhiteSpace(cursor.After) &&
+                   (cursorDirection == Direction.After || cursorDirection == Direction.Next))
                 {
-                    cursorStr = (path.Contains("?") ? "&" : "?") + "after=" + cursor.After;
+                    cursorPart = (path.Contains("?") ? "&" : "?") + "after=" + cursor.After;
                 }
                 else if (!string.IsNullOrWhiteSpace(cursor.Before))
                 {
-                    cursorStr = (path.Contains("?") ? "&" : "?") + "before=" + cursor.Before;
+                    cursorPart = (path.Contains("?") ? "&" : "?") + "before=" + cursor.Before;
                 }
             }
 
-            var response = await RestClient.GetAsync($"/{GraphApiVersion}{path}{accessToken}{cursorStr}", false);
-            var serializedResponse = SerializeResponse(response);
-            return serializedResponse;
+            return path + cursorPart;
         }
 
         internal JObject SerializeResponse(IRestResponse<string> response)
@@ -112,7 +135,7 @@ namespace FacebookCore
                 }
                 return null;
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }

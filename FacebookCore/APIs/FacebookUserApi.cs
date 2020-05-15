@@ -42,8 +42,23 @@ namespace FacebookCore.APIs
         /// <returns>JObject with user information</returns>
         public async Task<JObject> RequestMetaDataAsync()
         {
-            var response = await FacebookClient.GetAsync($"/{FacebookClient.GraphApiVersion}/me?metadata=1", _authToken);
+            var response = await FacebookClient.GetAsync($"/me?metadata=1", _authToken);
             return response;
+        }
+
+        /// <summary>
+        /// Gets a user access token that lasts around 60 days.
+        /// </summary>
+        /// <source>https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing/#get-a-long-lived-page-access-token</source>
+        /// <returns>JObject with extended access token</returns>
+        public async Task<JObject> RequestExtendAccessToken()
+        {
+            return await FacebookClient.GetAsync(
+              $"/oauth/access_token" +
+              $"?grant_type=fb_exchange_token" +
+              $"&client_id={FacebookClient.ClientId}" +
+              $"&client_secret={FacebookClient.ClientSecret}" +
+              $"&fb_exchange_token={_authToken}");
         }
     }
 }
