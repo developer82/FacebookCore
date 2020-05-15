@@ -7,11 +7,7 @@ namespace FacebookCore.Collections
 {
     public class AppTestUsersCollection : FacebookCollection<TestUser>
     {
-        private FacebookClient _fbClient;
-        private string _appAccessToken;
-        private string _appId;
-
-        public FacebookCursor Cursor { get; internal set; }
+        public new FacebookCursor Cursor { get; internal set; }
 
         public AppTestUsersCollection(FacebookClient client, string query, string token, FacebookCursor cursor = null) : base(client, query, token, TestUserMapper, cursor)
         {
