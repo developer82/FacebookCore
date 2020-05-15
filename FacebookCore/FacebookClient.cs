@@ -18,7 +18,7 @@ namespace FacebookCore
     public class FacebookClient
     {
         private FacebookAppApi _app;
-        
+
         internal string ClientId { get; private set; }
 
         internal string ClientSecret { get; private set; }
@@ -31,7 +31,7 @@ namespace FacebookCore
         /// Application API
         /// </summary>
         public FacebookAppApi App => _app ?? (_app = new FacebookAppApi(this));
-        
+
         public FacebookClient(string clientId, string clientSecret)
         {
             ClientId = clientId;
@@ -40,7 +40,7 @@ namespace FacebookCore
         }
 
         public FacebookClient(FacebookConfig facebookConfig)
-            :this(facebookConfig.ClientId, facebookConfig.ClientSecret)
+            : this(facebookConfig.ClientId, facebookConfig.ClientSecret)
         {
             GraphApiVersion = facebookConfig.GraphApiVersion;
         }
@@ -78,7 +78,7 @@ namespace FacebookCore
             path = StandardizePath(path);
             path = AddAccessTokenToPathIfNeeded(path, accessToken);
             path = AddCursorToPathIfNeeded(path, cursor, cursorDirection);
-            
+
             return SerializeResponse(await RestClient.GetAsync($"/{GraphApiVersion}{path}", false));
         }
 
@@ -125,19 +125,21 @@ namespace FacebookCore
 
         internal JObject SerializeResponse(IRestResponse<string> response)
         {
-            try
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                if (response.StatusCode == HttpStatusCode.OK)
+                try
                 {
                     var jsreader = new JsonTextReader(new StringReader(response.RawData.ToString()));
-                    var json = (JObject)new JsonSerializer().Deserialize(jsreader);
-                    return json;
+                    return (JObject)new JsonSerializer().Deserialize(jsreader);
                 }
-                return null;
+                catch
+                {
+                    return null;
+                }
             }
-            catch
+            else
             {
-                return null;
+                throw new FacebookApiException(response.RawData.ToString(), response.Exception);
             }
         }
     }
