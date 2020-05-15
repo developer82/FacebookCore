@@ -24,6 +24,7 @@ namespace FacebookCore.APIs
         /// <param name="client">Facebook client instance</param>
         public FacebookAppApi(FacebookClient client) : base(client)
         {
+            _appId = client.ClientId;
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace FacebookCore.APIs
                 _appAccessToken = json["access_token"].ToString();
                 return _appAccessToken;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -89,7 +90,7 @@ namespace FacebookCore.APIs
                 string appId = accessToken.Split(new char[] { '|' })[0];
                 return appId;
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
